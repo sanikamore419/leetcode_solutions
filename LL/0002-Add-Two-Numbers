@@ -1,0 +1,184 @@
+# 2. Add Two Numbers
+
+**Difficulty:** Medium  
+**Topic:** Linked List
+
+## Problem Statement
+
+You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each node contains a single digit. Add the two numbers and return the sum as a linked list.
+
+You may assume the two numbers do not contain any leading zero, except the number `0` itself.
+
+### Example
+
+**Input**
+```
+l1 = [2,4,3]
+l2 = [5,6,4]
+```
+
+**Output**
+```
+[7,0,8]
+```
+
+**Explanation**
+
+```
+342 + 465 = 807
+```
+
+---
+
+# Approach
+
+This problem is similar to the way we perform addition by hand.
+
+- Traverse both linked lists simultaneously.
+- Add the corresponding digits along with any carry from the previous addition.
+- Store the last digit (`sum % 10`) in a new node.
+- Carry forward (`sum / 10`) to the next iteration.
+- Continue until both lists are fully traversed and there is no remaining carry.
+
+A **dummy node** is used to simplify the creation of the result linked list.
+
+---
+
+# Algorithm
+
+1. Create a dummy node.
+2. Create a pointer `curr` pointing to the dummy node.
+3. Initialize `carry = 0`.
+4. While either list has nodes or carry is not zero:
+   - Start `sum` with the carry.
+   - Add the current value from `l1` if available.
+   - Add the current value from `l2` if available.
+   - Update carry using `sum / 10`.
+   - Create a new node with value `sum % 10`.
+   - Move `curr` to the new node.
+5. Return `dummy->next`.
+
+---
+
+# C++ Solution
+
+```cpp
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+
+        ListNode* dummy = new ListNode(0);
+        ListNode* curr = dummy;
+
+        int carry = 0;
+
+        while (l1 != nullptr || l2 != nullptr || carry) {
+
+            int sum = carry;
+
+            if (l1) {
+                sum += l1->val;
+                l1 = l1->next;
+            }
+
+            if (l2) {
+                sum += l2->val;
+                l2 = l2->next;
+            }
+
+            carry = sum / 10;
+
+            curr->next = new ListNode(sum % 10);
+            curr = curr->next;
+        }
+
+        return dummy->next;
+    }
+};
+```
+
+---
+
+# Dry Run
+
+### Input
+
+```
+l1 = 2 → 4 → 3
+l2 = 5 → 6 → 4
+```
+
+### Iteration 1
+
+```
+2 + 5 + 0 = 7
+
+Digit = 7
+Carry = 0
+
+Result:
+7
+```
+
+### Iteration 2
+
+```
+4 + 6 + 0 = 10
+
+Digit = 0
+Carry = 1
+
+Result:
+7 → 0
+```
+
+### Iteration 3
+
+```
+3 + 4 + 1 = 8
+
+Digit = 8
+Carry = 0
+
+Result:
+7 → 0 → 8
+```
+
+---
+
+# Complexity Analysis
+
+**Time Complexity:** `O(max(n, m))`
+
+- Each node is visited exactly once.
+
+**Space Complexity:** `O(max(n, m))`
+
+- A new linked list is created to store the result.
+
+---
+
+# Key Concepts
+
+- Linked List Traversal
+- Dummy Node
+- Carry Handling
+- Modular Arithmetic (`%`)
+- Integer Division (`/`)
+
+---
+
+## LeetCode
+
+**Problem:** 2. Add Two Numbers
